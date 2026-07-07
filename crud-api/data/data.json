@@ -1,0 +1,17 @@
+{
+    "nextId": 5,
+    "users": [
+        {
+            "name": "Joao",
+            "age": 18,
+            "email": "joao@email.com",
+            "id": 2
+        },
+        {
+            "name": "Ana",
+            "age": 20,
+            "email": "ana@email.com",
+            "id": 4
+        }
+    ]
+}

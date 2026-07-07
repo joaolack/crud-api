@@ -8,7 +8,7 @@ function getAllUsers(string $dataFile): array {
     return ['users' => $data['users']];
 }
 
-function createUser(string $dataFile): array {
+function createUser(string $dataFile, ?array $input): array {
     if (!is_array($input)) {
         return ['error' => 'Invalid JSON body', 'status' => 400];
     }

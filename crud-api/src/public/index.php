@@ -1,14 +1,13 @@
 <?php
 
 require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/openapi.php';
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
 in_array($origin, $allowedOrigins) ? 
-    header("Acess-Control-Allow-Origin: $origin") : null;
-    header('Acess-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
-    header('Acess-Control-Allow-Headers: Content-Type');
+    header("Access-Control-Allow-Origin: $origin") : null;
+    header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
@@ -26,5 +25,5 @@ match ($uri) {
 
 function notFound(): void {
     http_response_code(404);
-    echo json_decode(['error' => 'Not found']);
+    echo json_encode(['error' => 'Not found']);
 }
