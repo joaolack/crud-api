@@ -1,5 +1,5 @@
 {
-    "nextId": 5,
+    "nextId": 10,
     "users": [
         {
             "name": "Joao",
@@ -12,6 +12,30 @@
             "age": 20,
             "email": "ana@email.com",
             "id": 4
+        },
+        {
+            "name": "Pedro",
+            "age": 56,
+            "email": "pedro@hotmail.com",
+            "id": 5
+        },
+        {
+            "name": "Lucas leal",
+            "age": 17,
+            "email": "lucas@email.com",
+            "id": 6
+        },
+        {
+            "name": "teste",
+            "age": 67,
+            "email": "teste@email.com",
+            "id": 7
+        },
+        {
+            "name": "Maria",
+            "age": 12,
+            "email": "maria@email.com",
+            "id": 9
         }
     ]
 }
