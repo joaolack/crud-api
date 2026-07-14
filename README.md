@@ -12,7 +12,7 @@ crud-api/
 
 ## Dados locais
 
-O arquivo usado pela API em desenvolvimento e producao local é:
+O arquivo usado pela API em desenvolvimento e produção local é:
 
 ```text
 crud-api/data/data.json
@@ -79,6 +79,20 @@ Por padrão, o frontend consome a API em:
 http://localhost:8000/api/users
 ```
 
+## Documentacao da API
+
+Com o backend rodando, a documentação interativa da API fica disponível em:
+
+```text
+http://localhost:8000/docs
+```
+
+A interface usa Swagger UI e carrega a especificação OpenAPI em:
+
+```text
+http://localhost:8000/docs/openapi.yaml
+```
+
 ## Endpoints
 
 ### Listar usuarios
@@ -135,6 +149,5 @@ Content-Type: application/json
 ```http
 DELETE /api/users?id=1
 ```
-
 
 

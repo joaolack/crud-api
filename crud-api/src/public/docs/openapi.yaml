@@ -1,0 +1,315 @@
+openapi: 3.0.3
+
+info:
+  title: CRUD API
+  description: Simple user CRUD API built with PHP and JSON file storage.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000
+    description: Local backend server
+
+tags:
+  - name: Users
+    description: User management operations
+
+paths:
+  /api/users:
+    get:
+      tags:
+        - Users
+      summary: List users
+      description: Returns all users stored in the JSON data file.
+      responses:
+        "200":
+          description: Users returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserListResponse"
+              examples:
+                success:
+                  value:
+                    users:
+                      - id: 1
+                        name: Maria
+                        age: 30
+                        email: maria@email.com
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    post:
+      tags:
+        - Users
+      summary: Create user
+      description: Creates a new user and automatically assigns an ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+            examples:
+              createUser:
+                value:
+                  name: Maria
+                  age: 30
+                  email: maria@email.com
+      responses:
+        "201":
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              examples:
+                created:
+                  value:
+                    id: 1
+                    name: Maria
+                    age: 30
+                    email: maria@email.com
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    put:
+      tags:
+        - Users
+      summary: Replace user
+      description: Updates all editable fields of an existing user.
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+            examples:
+              updateUser:
+                value:
+                  name: Maria Silva
+                  age: 31
+                  email: maria.silva@email.com
+      responses:
+        "200":
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    patch:
+      tags:
+        - Users
+      summary: Partially update user
+      description: Updates one or more editable fields of an existing user.
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchUserRequest"
+            examples:
+              patchUser:
+                value:
+                  age: 32
+      responses:
+        "200":
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Removes an existing user by ID.
+      parameters:
+        - $ref: "#/components/parameters/UserId"
+      responses:
+        "200":
+          description: User deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteUserResponse"
+              examples:
+                deleted:
+                  value:
+                    deleted:
+                      id: 1
+                      name: Maria
+                      age: 30
+                      email: maria@email.com
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+
+components:
+  parameters:
+    UserId:
+      name: id
+      in: query
+      required: true
+      description: User ID.
+      schema:
+        type: integer
+        minimum: 1
+      example: 1
+
+  responses:
+    BadRequest:
+      description: Invalid request.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            missingField:
+              value:
+                error: name, age, email are required
+            invalidJson:
+              value:
+                error: Invalid JSON body
+
+    NotFound:
+      description: User not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            userNotFound:
+              value:
+                error: User not found
+
+    InternalServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            internalError:
+              value:
+                error: Internal server error
+
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - age
+        - email
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 1
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Maria
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          example: 30
+        email:
+          type: string
+          format: email
+          example: maria@email.com
+
+    UserListResponse:
+      type: object
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - age
+        - email
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Maria
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          example: 30
+        email:
+          type: string
+          format: email
+          example: maria@email.com
+
+    UpdateUserRequest:
+      allOf:
+        - $ref: "#/components/schemas/CreateUserRequest"
+
+    PatchUserRequest:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: Maria Silva
+        age:
+          type: integer
+          minimum: 1
+          maximum: 150
+          example: 31
+        email:
+          type: string
+          format: email
+          example: maria.silva@email.com
+
+    DeleteUserResponse:
+      type: object
+      required:
+        - deleted
+      properties:
+        deleted:
+          $ref: "#/components/schemas/User"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: Invalid JSON body

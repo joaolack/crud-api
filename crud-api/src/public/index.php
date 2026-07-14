@@ -18,8 +18,20 @@ $uri = strtok($_SERVER['REQUEST_URI'], '?');
 
 match ($uri) {
     '/api/users' => require __DIR__ . '/../src/api.php',
+    '/docs' => require __DIR__ . '/docs/views/docs.html',
+    '/docs/openapi.yaml' => serveOpenApi(__DIR__ . '/docs/openapi.yaml'),
     default => notFound(),
 };
+
+function serveOpenApi(string $file): void {
+    if (!file_exists($file)) {
+        notFound();
+        return;
+    }
+
+    header('Content-Type: application/yaml; charset=utf-8');
+    readfile($file);
+}
 
 function notFound(): void {
     http_response_code(404);
