@@ -1,9 +1,5 @@
 services:
   frontend:
     build: .
-    container_name: crud-frontend
     ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
-      - /app/node_modules
+      - "8080:80"

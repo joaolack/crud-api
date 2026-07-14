@@ -1,13 +1,3 @@
-FROM node:22-alpine
+FROM httpd:alpine
 
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
-EXPOSE 8080
-
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+COPY dist/ /usr/local/apache2/htdocs/

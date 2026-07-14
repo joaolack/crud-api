@@ -1,9 +1,12 @@
-FROM php:8.3-cli 
+FROM php:8.3-cli
 
-WORKDIR /app/src
+WORKDIR /app
 
-COPY . .
+COPY src/ src/
+COPY data/ data/
 
-EXPOSE 8000
+RUN chmod -R 777 data/
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public", "public/index.php"]
+EXPOSE 80
+
+CMD ["php", "-S", "0.0.0.0:80", "-t", "src/public", "src/public/index.php"]
